@@ -36,11 +36,11 @@ public class StudentVerticle extends AbstractVerticle {
         router.post("/student").handler(this::placeMessageInMq);
 
 //        GET request
-        router.get("/student").handler(handler -> handler.response().end("Hello "));
+        router.get("/student").handler(handler -> handler.response().end("all Student details "));
 //        GET request with path parameters
         router.get("/student/:name").handler(handler -> {
             String name = handler.pathParam("name");
-            handler.response().end(String.format("Hello %s ", name));
+            handler.response().end(String.format("Student %s details ", name));
         });
 
 //        POST request
