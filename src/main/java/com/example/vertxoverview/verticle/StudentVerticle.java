@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.FileNotFoundException;
 
 @Component
-public class MainVerticle extends AbstractVerticle {
+public class StudentVerticle extends AbstractVerticle {
 
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
@@ -33,18 +33,18 @@ public class MainVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
 
         // call API and place message in MQ after completion
-        router.get("/api/v1/hello").handler(this::placeMessageInMq);
+        router.post("/student").handler(this::placeMessageInMq);
 
 //        GET request
-        router.get("/testing").handler(handler -> handler.response().end("Hello "));
+        router.get("/student").handler(handler -> handler.response().end("Hello "));
 //        GET request with path parameters
-        router.get("/greet/:name").handler(handler -> {
+        router.get("/student/:name").handler(handler -> {
             String name = handler.pathParam("name");
             handler.response().end(String.format("Hello %s ", name));
         });
 
 //        POST request
-        router.post("/test").handler(context ->
+        router.post("/college").handler(context ->
         {
             context.request().bodyHandler(System.out::println);
             context.response().end("done");
