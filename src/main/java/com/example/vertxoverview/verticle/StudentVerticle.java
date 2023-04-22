@@ -33,7 +33,7 @@ public class StudentVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
 
         // call API and place message in MQ after completion
-        router.post("/student").handler(this::placeMessageInMq);
+        router.post("/student").handler(this::createStudentRecAndplaceMessageInMq);
 
 //        GET request
         router.get("/student").handler(handler -> handler.response().end("all Student details "));
@@ -42,6 +42,12 @@ public class StudentVerticle extends AbstractVerticle {
             String name = handler.pathParam("name");
             handler.response().end(String.format("Student %s details ", name));
         });
+
+        router.get("/america").handler(a -> {
+            a.reroute("/india");
+        });
+
+        router.get("/india").handler( i-> i.response().end("I love India"));
 
 //        POST request
         router.post("/college").handler(context ->
@@ -53,9 +59,9 @@ public class StudentVerticle extends AbstractVerticle {
         return router;
     }
 
-    private void placeMessageInMq(RoutingContext ctx) {
+    private void createStudentRecAndplaceMessageInMq(RoutingContext ctx) {
 //        perform API call task...
-        vertx.eventBus().request("mqHandlerOnAPICompletion","", reply -> ctx.request().response().end((String) reply.result().body()));
+        vertx.eventBus().request("mqHandlerOnAPICompletion","", reply -> ctx.request().response().end((String) "Created student record. Placing message in MQ:"+reply.result().body()));
     }
 
 }
